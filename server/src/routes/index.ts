@@ -1,0 +1,14 @@
+import { Router } from 'express';
+import authRoutes from './auth.routes';
+import recordRoutes from './record.routes';
+import userRoutes from './user.routes';
+import dashboardRoutes from './dashboard.routes';
+
+const router = Router();
+
+router.use('/auth', authRoutes);
+router.use('/records', recordRoutes);
+router.use('/users', userRoutes);
+router.use('/dashboard', dashboardRoutes);
+
+export default router;
