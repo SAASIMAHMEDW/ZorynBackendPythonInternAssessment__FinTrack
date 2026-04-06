@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+      target: production
+    container_name: fintrack-server
+    restart: unless-stopped
+    ports:
+      - '5000:5000'
+    environment:
+      - PORT=5000
+      - NODE_ENV=production
+      - DATABASE_URL=${DATABASE_URL}
+      - JWT_ACCESS_SECRET=${JWT_ACCESS_SECRET:-fintrack-access-8f3a9c2d1e4b7f6a0e9d5c3b}
+      - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET:-fintrack-refresh-2d4e6f8a1b3c5d7e9f0a2b4c}
+      - CLIENT_URL=http://localhost
+    networks:
+      - fintrack
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+      target: production
+    container_name: fintrack-client
+    restart: unless-stopped
+    ports:
+      - '80:80'
+    depends_on:
+      - server
+    networks:
+      - fintrack
+
+networks:
+  fintrack:
+    driver: bridge
